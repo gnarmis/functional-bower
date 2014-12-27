@@ -1,0 +1,24 @@
+{
+  "name": "functional-bower",
+  "version": "0.0.1",
+  "authors": [
+    "Gursimran Singh <g@kilotau.com>"
+  ],
+  "description": "Bundling Oliver Steele's functional javascript library",
+  "keywords": [
+    "functional",
+    "javascript",
+    "functional",
+    "programming",
+    "functional-node"
+  ],
+  "license": "MIT",
+  "homepage": "http://github.com/gnarmis/functional-bower",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
