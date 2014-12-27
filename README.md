@@ -8,6 +8,12 @@ I used the files in [this Node.js port][functional-node] and used `browserify`
 to bundle them up and put that bundled up javascript in `dict/`.
 Use `./build.sh`.
 
+I did:
+* `npm i functional-node`
+* `./build.sh`
+
+Don't need a `package.json`, really...
+
 ## Usage
 
 `bower install functional-bower`

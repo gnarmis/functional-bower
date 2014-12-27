@@ -1,4 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// Depends on npm package 'functional-node'
+require('functional-node').load().install();
+},{"functional-node":2}],2:[function(require,module,exports){
 (function (global){
 //node.js shim
 exports.load = function (parent) { return (function (window) {
@@ -30,13 +33,13 @@ var Functional = {};
  */
 Functional.install = function(except) {
     var source = Functional,
-  target = window;
+	target = window;
     for (var name in source)
-  name == 'install'
-  || name.charAt(0) == '_'
-  || except && name in except
-  || {}[name] // work around Prototype
-  || (target[name] = source[name]);
+	name == 'install'
+	|| name.charAt(0) == '_'
+	|| except && name in except
+	|| {}[name] // work around Prototype
+	|| (target[name] = source[name]);
     return Functional;
 }
 
@@ -52,11 +55,11 @@ Functional.install = function(except) {
  */
 Functional.compose = function(/*fn...*/) {
     var fns = Functional.map(Function.toFunction, arguments),
-  arglen = fns.length;
+	arglen = fns.length;
     return function() {
-  for (var i = arglen; --i >= 0; )
-      arguments = [fns[i].apply(this, arguments)];
-  return arguments[0];
+	for (var i = arglen; --i >= 0; )
+	    arguments = [fns[i].apply(this, arguments)];
+	return arguments[0];
     }
 }
 
@@ -68,11 +71,11 @@ Functional.compose = function(/*fn...*/) {
  */
 Functional.sequence = function(/*fn...*/) {
     var fns = Functional.map(Function.toFunction, arguments),
-  arglen = fns.length;
+	arglen = fns.length;
     return function() {
-  for (var i = 0; i < arglen; i++)
-      arguments = [fns[i].apply(this, arguments)];
-  return arguments[0];
+	for (var i = 0; i < arglen; i++)
+	    arguments = [fns[i].apply(this, arguments)];
+	return arguments[0];
     }
 }
 
@@ -91,9 +94,9 @@ Functional.sequence = function(/*fn...*/) {
 Functional.map = function(fn, sequence, object) {
     fn = Function.toFunction(fn);
     var len = sequence.length,
-  result = new Array(len);
+	result = new Array(len);
     for (var i = 0; i < len; i++)
-  result[i] = fn.apply(object, [sequence[i], i]);
+	result[i] = fn.apply(object, [sequence[i], i]);
     return result;
 }
 
@@ -107,9 +110,9 @@ Functional.map = function(fn, sequence, object) {
 Functional.reduce = function(fn, init, sequence, object) {
     fn = Function.toFunction(fn);
     var len = sequence.length,
-  result = init;
+	result = init;
     for (var i = 0; i < len; i++)
-  result = fn.apply(object, [result, sequence[i]]);
+	result = fn.apply(object, [result, sequence[i]]);
     return result;
 }
 
@@ -122,10 +125,10 @@ Functional.reduce = function(fn, init, sequence, object) {
 Functional.select = function(fn, sequence, object) {
     fn = Function.toFunction(fn);
     var len = sequence.length,
-  result = [];
+	result = [];
     for (var i = 0; i < len; i++) {
-  var x = sequence[i];
-  fn.apply(object, [x, i]) && result.push(x);
+	var x = sequence[i];
+	fn.apply(object, [x, i]) && result.push(x);
     }
     return result;
 }
@@ -145,9 +148,9 @@ Functional.foldl = Functional.reduce;
 Functional.foldr = function(fn, init, sequence, object) {
     fn = Function.toFunction(fn);
     var len = sequence.length,
-  result = init;
+	result = init;
     for (var i = len; --i >= 0; )
-  result = fn.apply(object, [sequence[i], result]);
+	result = fn.apply(object, [sequence[i], result]);
     return result;
 }
 
@@ -164,13 +167,13 @@ Functional.foldr = function(fn, init, sequence, object) {
  */
 Functional.and = function(/*functions...*/) {
     var args = Functional.map(Function.toFunction, arguments),
-  arglen = args.length;
+	arglen = args.length;
     return function() {
-  var value = true;
-  for (var i = 0; i < arglen; i++)
-      if (!(value = args[i].apply(this, arguments)))
-    break;
-  return value;
+	var value = true;
+	for (var i = 0; i < arglen; i++)
+	    if (!(value = args[i].apply(this, arguments)))
+		break;
+	return value;
     }
 }
 
@@ -185,13 +188,13 @@ Functional.and = function(/*functions...*/) {
  */
 Functional.or = function(/*functions...*/) {
     var args = Functional.map(Function.toFunction, arguments),
-  arglen = args.length;
+	arglen = args.length;
     return function() {
-  var value = false;
-  for (var i = 0; i < arglen; i++)
-      if ((value = args[i].apply(this, arguments)))
-    break;
-  return value;
+	var value = false;
+	for (var i = 0; i < arglen; i++)
+	    if ((value = args[i].apply(this, arguments)))
+		break;
+	return value;
     }
 }
 
@@ -206,10 +209,10 @@ Functional.or = function(/*functions...*/) {
 Functional.some = function(fn, sequence, object) {
     fn = Function.toFunction(fn);
     var len = sequence.length,
-  value = false;
+	value = false;
     for (var i = 0; i < len; i++)
-  if ((value = fn.call(object, sequence[i])))
-      break;
+	if ((value = fn.call(object, sequence[i])))
+	    break;
     return value;
 }
 
@@ -224,10 +227,10 @@ Functional.some = function(fn, sequence, object) {
 Functional.every = function(fn, sequence, object) {
     fn = Function.toFunction(fn);
     var len = sequence.length,
-  value = true;
+	value = true;
     for (var i = 0; i < len; i++)
-  if (!(value = fn.call(object, sequence[i])))
-      break;
+	if (!(value = fn.call(object, sequence[i])))
+	    break;
     return value;
 }
 
@@ -241,7 +244,7 @@ Functional.every = function(fn, sequence, object) {
 Functional.not = function(fn) {
     fn = Function.toFunction(fn);
     return function() {
-  return !fn.apply(null, arguments);
+	return !fn.apply(null, arguments);
     }
 }
 
@@ -259,16 +262,16 @@ Functional.not = function(fn) {
  */
 Functional.equal = function(/*fn...*/) {
     var arglen = arguments.length,
-  args = Functional.map(Function.toFunction, arguments);
+	args = Functional.map(Function.toFunction, arguments);
     if (!arglen) return Functional.K(true);
     // if arglen == 1 it's also constant true, but
     // call it for effect.
     return function() {
-  var value = args[0].apply(this, arguments);
-  for (var i = 1; i < arglen; i++)
-      if (value != args[i].apply(this, args))
-    return false;
-  return true;
+	var value = args[0].apply(this, arguments);
+	for (var i = 1; i < arglen; i++)
+	    if (value != args[i].apply(this, args))
+		return false;
+	return true;
     }
 }
 
@@ -295,7 +298,7 @@ Functional.lambda = function(object) {
 Functional.invoke = function(methodName/*, arguments*/) {
     var args = Array.slice(arguments, 1);
     return function(object) {
-  return object[methodName].apply(object, Array.slice(arguments, 1).concat(args));
+	return object[methodName].apply(object, Array.slice(arguments, 1).concat(args));
     }
 }
 
@@ -308,7 +311,7 @@ Functional.invoke = function(methodName/*, arguments*/) {
  */
 Functional.pluck = function(name) {
     return function(object) {
-  return object[name];
+	return object[name];
     }
 }
 
@@ -324,9 +327,9 @@ Functional.until = function(pred, fn) {
     fn = Function.toFunction(fn);
     pred = Function.toFunction(pred);
     return function(value) {
-  while (!pred.call(null, value))
-      value = fn.call(null, value);
-  return value;
+	while (!pred.call(null, value))
+	    value = fn.call(null, value);
+	return value;
     }
 }
 
@@ -340,8 +343,8 @@ Functional.zip = function(/*args...*/) {
     var n = Math.min.apply(null, Functional.map('.length', arguments));
     var results = new Array(n);
     for (var i = 0; i < n; i++) {
-  var key = String(i);
-  results[key] = Functional.map(pluck(key), arguments);
+	var key = String(i);
+	results[key] = Functional.map(pluck(key), arguments);
     };
     return results;
 }
@@ -349,13 +352,13 @@ Functional.zip = function(/*args...*/) {
 Functional._startRecordingMethodChanges = function(object) {
     var initialMethods = {};
     for (var name in object)
-  initialMethods[name] = object[name];
+	initialMethods[name] = object[name];
     return {getChangedMethods: function() {
-  var changedMethods = {};
-  for (var name in object)
-  if (object[name] != initialMethods[name])
-      changedMethods[name] = object[name];
-  return changedMethods;
+	var changedMethods = {};
+	for (var name in object)
+	if (object[name] != initialMethods[name])
+	    changedMethods[name] = object[name];
+	return changedMethods;
     }};
 }
 
@@ -363,12 +366,12 @@ Functional._startRecordingMethodChanges = function(object) {
 // define a function on `Functional` that delegates to it.
 Functional._attachMethodDelegates = function(methods) {
     for (var name in methods)
-  Functional[name] = Functional[name] || (function(name) {
-      var fn = methods[name];
-      return function(object) {
-    return fn.apply(Function.toFunction(object), Array.slice(arguments, 1));
-      }
-  })(name);
+	Functional[name] = Functional[name] || (function(name) {
+	    var fn = methods[name];
+	    return function(object) {
+		return fn.apply(Function.toFunction(object), Array.slice(arguments, 1));
+	    }
+	})(name);
 }
 
 // Record the current contents of `Function.prototype`, so that we
@@ -387,7 +390,7 @@ Function.prototype.bind = function(object/*, args...*/) {
     var fn = this;
     var args = Array.slice(arguments, 1);
     return function() {
-  return fn.apply(object, args.concat(Array.slice(arguments, 0)));
+	return fn.apply(object, args.concat(Array.slice(arguments, 0)));
     }
 }
 
@@ -404,7 +407,7 @@ Function.prototype.saturate = function(/*args*/) {
     var fn = this;
     var args = Array.slice(arguments, 0);
     return function() {
-  return fn.apply(this, args);
+	return fn.apply(this, args);
     }
 }
 
@@ -434,7 +437,7 @@ Function.prototype.saturate = function(/*args*/) {
 Function.prototype.aritize = function(n) {
     var fn = this;
     return function() {
-  return fn.apply(this, Array.slice(arguments, 0, n));
+	return fn.apply(this, Array.slice(arguments, 0, n));
     }
 }
 
@@ -458,7 +461,7 @@ Function.prototype.curry = function(/*args...*/) {
     var fn = this;
     var args = Array.slice(arguments, 0);
     return function() {
-  return fn.apply(this, args.concat(Array.slice(arguments, 0)));
+	return fn.apply(this, args.concat(Array.slice(arguments, 0)));
     };
 }
 
@@ -472,7 +475,7 @@ Function.prototype.rcurry = function(/*args...*/) {
     var fn = this;
     var args = Array.slice(arguments, 0);
     return function() {
-  return fn.apply(this, Array.slice(arguments, 0).concat(args));
+	return fn.apply(this, Array.slice(arguments, 0).concat(args));
     };
 }
 
@@ -484,12 +487,12 @@ Function.prototype.ncurry = function(n/*, args...*/) {
     var fn = this;
     var largs = Array.slice(arguments, 1);
     return function() {
-  var args = largs.concat(Array.slice(arguments, 0));
-  if (args.length < n) {
-      args.unshift(n);
-      return fn.ncurry.apply(fn, args);
-  }
-  return fn.apply(this, args);
+	var args = largs.concat(Array.slice(arguments, 0));
+	if (args.length < n) {
+	    args.unshift(n);
+	    return fn.ncurry.apply(fn, args);
+	}
+	return fn.apply(this, args);
     };
 }
 
@@ -501,12 +504,12 @@ Function.prototype.rncurry = function(n/*, args...*/) {
     var fn = this;
     var rargs = Array.slice(arguments, 1);
     return function() {
-  var args = Array.slice(arguments, 0).concat(rargs);
-  if (args.length < n) {
-      args.unshift(n);
-      return fn.rncurry.apply(fn, args);
-  }
-  return fn.apply(this, args);
+	var args = Array.slice(arguments, 0).concat(rargs);
+	if (args.length < n) {
+	    args.unshift(n);
+	    return fn.rncurry.apply(fn, args);
+	}
+	return fn.apply(this, args);
     };
 }
 
@@ -542,15 +545,15 @@ Function.prototype.partial = function(/*args*/) {
     //substitution positions
     var subpos = [], value;
     for (var i = 0; i < arguments.length; i++)
-  arguments[i] == _ && subpos.push(i);
+	arguments[i] == _ && subpos.push(i);
     return function() {
-  var specialized = args.concat(Array.slice(arguments, subpos.length));
-  for (var i = 0; i < Math.min(subpos.length, arguments.length); i++)
-      specialized[subpos[i]] = arguments[i];
-  for (var i = 0; i < specialized.length; i++)
-      if (specialized[i] == _)
-    return fn.partial.apply(fn, specialized);
-  return fn.apply(this, specialized);
+	var specialized = args.concat(Array.slice(arguments, subpos.length));
+	for (var i = 0; i < Math.min(subpos.length, arguments.length); i++)
+	    specialized[subpos[i]] = arguments[i];
+	for (var i = 0; i < specialized.length; i++)
+	    if (specialized[i] == _)
+		return fn.partial.apply(fn, specialized);
+	return fn.apply(this, specialized);
     }
 }
 
@@ -601,7 +604,7 @@ Function.S = function(f, g) {
     f = Function.toFunction(f);
     g = Function.toFunction(g);
     return function() {
-  return f.apply(this, [g.apply(this, arguments)].concat(Array.slice(arguments, 0)));
+	return f.apply(this, [g.apply(this, arguments)].concat(Array.slice(arguments, 0)));
     }
 }
 
@@ -621,9 +624,9 @@ Function.S = function(f, g) {
 Function.prototype.flip = function() {
     var fn = this;
     return function() {
-  var args = Array.slice(arguments, 0);
-  args = args.slice(1,2).concat(args.slice(0,1)).concat(args.slice(2));
-  return fn.apply(this, args);
+	var args = Array.slice(arguments, 0);
+	args = args.slice(1,2).concat(args.slice(0,1)).concat(args.slice(2));
+	return fn.apply(this, args);
     }
 }
 
@@ -640,8 +643,8 @@ Function.prototype.flip = function() {
 Function.prototype.uncurry = function() {
     var fn = this;
     return function() {
-  var f1 = fn.apply(this, Array.slice(arguments, 0, 1));
-  return f1.apply(this, Array.slice(arguments, 1));
+	var f1 = fn.apply(this, Array.slice(arguments, 0, 1));
+	return f1.apply(this, Array.slice(arguments, 1));
     }
 }
 
@@ -664,7 +667,7 @@ Function.prototype.prefilterObject = function(filter) {
     filter = Function.toFunction(filter);
     var fn = this;
     return function() {
-  return fn.apply(filter(this), arguments);
+	return fn.apply(filter(this), arguments);
     }
 }
 
@@ -679,9 +682,9 @@ Function.prototype.prefilterAt = function(index, filter) {
     filter = Function.toFunction(filter);
     var fn = this;
     return function() {
-  var args = Array.slice(arguments, 0);
-  args[index] = filter.call(this, args[index]);
-  return fn.apply(this, args);
+	var args = Array.slice(arguments, 0);
+	args[index] = filter.call(this, args[index]);
+	return fn.apply(this, args);
     }
 }
 
@@ -700,10 +703,10 @@ Function.prototype.prefilterSlice = function(filter, start, end) {
     start = start || 0;
     var fn = this;
     return function() {
-  var args = Array.slice(arguments, 0);
-  var e = end < 0 ? args.length + end : end || args.length;
-  args.splice.apply(args, [start, (e||args.length)-start].concat(filter.apply(this, args.slice(start, e))));
-  return fn.apply(this, args);
+	var args = Array.slice(arguments, 0);
+	var e = end < 0 ? args.length + end : end || args.length;
+	args.splice.apply(args, [start, (e||args.length)-start].concat(filter.apply(this, args.slice(start, e))));
+	return fn.apply(this, args);
     }
 }
 
@@ -724,7 +727,7 @@ Function.prototype.compose = function(fn) {
     var self = this;
     fn = Function.toFunction(fn);
     return function() {
-  return self.apply(this, [fn.apply(this, arguments)]);
+	return self.apply(this, [fn.apply(this, arguments)]);
     }
 }
 
@@ -744,7 +747,7 @@ Function.prototype.sequence = function(fn) {
     var self = this;
     fn = Function.toFunction(fn);
     return function() {
-  return fn.apply(this, [self.apply(this, arguments)]);
+	return fn.apply(this, [self.apply(this, arguments)]);
     }
 }
 
@@ -773,7 +776,7 @@ Function.prototype.guard = function(guard, otherwise) {
     guard = Function.toFunction(guard || Functional.I);
     otherwise = Function.toFunction(otherwise || Functional.I);
     return function() {
-  return (guard.apply(this, arguments) ? fn : otherwise).apply(this, arguments);
+	return (guard.apply(this, arguments) ? fn : otherwise).apply(this, arguments);
     }
 }
 
@@ -788,10 +791,10 @@ Function.prototype.traced = function(name) {
     var self = this;
     name = name || self;
     return function() {
-  window.console && console.info('[', name, 'apply(', this!=window && this, ',', arguments, ')');
-  var result = self.apply(this, arguments);
-  window.console && console.info(']', name, ' -> ', result);
-  return result;
+	window.console && console.info('[', name, 'apply(', this!=window && this, ',', arguments, ')');
+	var result = self.apply(this, arguments);
+	window.console && console.info(']', name, ' -> ', result);
+	return result;
     }
 }
 
@@ -821,9 +824,9 @@ Function.toFunction = Function.toFunction || Functional.K;
 
 if (!Array.slice) { // mozilla already supports this
     Array.slice = (function(slice) {
-  return function(object) {
-      return slice.apply(object, slice.call(arguments, 1));
-  };
+	return function(object) {
+	    return slice.apply(object, slice.call(arguments, 1));
+	};
     })(Array.prototype.slice);
 }
 
@@ -831,8 +834,9 @@ return Functional;
 
 //end node.js shim
 })(parent || global); };
+
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./to-function.js":2}],2:[function(require,module,exports){
+},{"./to-function.js":3}],3:[function(require,module,exports){
 //node.js shim
 exports.install = function () {
 /*
@@ -949,8 +953,8 @@ String.prototype.lambda.cache = function() {
         cache = {},
         uncached = proto.lambda,
         cached = function() {
-          var key = '#' + this; // avoid hidden properties on Object.prototype
-          return cache[key] || (cache[key] = uncached.call(this));
+	        var key = '#' + this; // avoid hidden properties on Object.prototype
+	        return cache[key] || (cache[key] = uncached.call(this));
         };
     cached.cached = function(){};
     cached.uncache = function(){proto.lambda = uncached};
@@ -1058,4 +1062,5 @@ String.prototype.ECMAsplit =
 
 //end node.js shim
 };
+
 },{}]},{},[1]);
