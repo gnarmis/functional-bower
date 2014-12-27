@@ -12,6 +12,7 @@
     "programming",
     "functional-node"
   ],
+  "main": "dist/functional.bundle.js",
   "license": "MIT",
   "homepage": "http://github.com/gnarmis/functional-bower",
   "ignore": [
